@@ -10,6 +10,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,3 +35,15 @@ jobs:
       - name: Build with Maven
         working-directory: CinemaBookingApp
         run: mvn clean install -DskipTests
+
+      - name: Run tests
+        working-directory: CinemaBookingApp
+        env:
+          MONGO_URI: mongodb://localhost:27017/cinemabooking
+          SECRETKEY: testSecretKeyForCIOnlyNotRealKey123456
+          JWT_EXPIRATION: 86400000
+          JWT_REFRESH: 604800000
+          PAYSTACK_SECRETKEY: dummy
+          RESEND_PASSWORD: dummy
+          RESEND_PORT: 465
+        run: mvn test
