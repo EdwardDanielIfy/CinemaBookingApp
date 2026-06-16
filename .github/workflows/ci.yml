@@ -27,4 +27,5 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
       - name: Build with Maven
+        working-directory: CinemaBookingApp
         run: mvn clean install -DskipTests
